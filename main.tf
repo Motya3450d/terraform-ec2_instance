@@ -1,14 +1,5 @@
-provider "aws" {}
-
-
-resource "private_key" "my_private_key" {
-    algorithm = "RSA"
-    rsa_bits = 4096
-}
-
-resource "aws_key_pair" "my_key_pair" {
-    key_name = "emp-web-key"
-    public_key = private_key.my_private_key.public_key_openssh
+provider "aws" {
+    region = "eu-central-1"
 }
 
 resource "aws_instance" "my_instance"{
@@ -16,9 +7,9 @@ resource "aws_instance" "my_instance"{
 
     ami = "ami-0a261c0e5f51090b1"
     instance_type = "t2.micro"
-    key_name = aws_key_pair.my_key_pair.key_name
     vpc_security_group_ids = [aws_security_group.my_group.id]
-    user_data = file("user_data.sh")
+    user_data = file("${path.module}/user_data.sh")
+    key_name = "motya-key-linux"
 
     tags = {
         Name = "My Ubuntu Server"
