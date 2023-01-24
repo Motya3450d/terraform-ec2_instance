@@ -2,6 +2,15 @@ provider "aws" {
     region = "eu-central-1"
 }
 
+terraform {
+    backend "s3" {
+        bucket = "matvii-terraform-state-bucket"
+        key = "dev/main/terraform.tfstate"
+        region = "eu-central-1"
+    }
+}
+
+
 resource "aws_instance" "my_instance"{
     count = 1
 
